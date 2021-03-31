@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/menu %>
+<div class="container-fluid bg-3 text-center">    
+  <h3><%= page %></h3><br>
+  <div class="row">
+    <div class="col-sm-4">
+ <% if (products.length>0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th> Price </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var i=0;i<products.length;i++)  { %> 
+                    <tr>
+                        <td><a href="/products/show/<%= products[i]._id  %>"><%= products[i].name%></a></td>
+          
+                        <td><%= products[i].price  %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+        </table>
+        <% } else { %>
+       <div>No product found</div>
+            <% } %>
+  </div>
+</div>
+</body>
+<% include partials/script %>
+</html>
