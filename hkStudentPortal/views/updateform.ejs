@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/menu %>
+<div class=" bg-3 text-center">    
+  
+    <div id="Upper-Container">
+        <div class="features-boxed" style="background-color:rgb(153,156,159);">
+          <div class="container">
+              <div class="intro">
+                  <h2 class="text-center" style="background-color:#999c9f;color:rgb(255,255,255);">Update Student&nbsp;</h2>
+              </div>
+              <form class="form-horizontal" action='../<%=student._id %>/update'  method=POST>
+                <label for="Name">Name:</label><br>
+                <input type='text' class="form-control" name='name' placeholder="name" required value='<%=student.name %>'><br>
+                <label for="RegID">RegID:</label><br>
+                <input type='number' class="form-control" name='regid' placeholder="regid" required value='<%=student.regid %>'><br>
+                <label for="Section">Section:</label><br>
+                <input type='text' class="form-control" name='sect' placeholder="sect" required value='<%=student.sect %>'><br>
+                <input type="submit" value="Update Student">
+              </form>
+          </div>
+      </div>
+
+  
+
+
+
+
+
+    </div>
+    <div class="footer-dark" style="background-color:rgb(44,49,52);">
+        <div id="Bottom-Container">
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col item social"><a href="https://www.facebook.com/profile.php?id=100004635136263"><i class="icon ion-social-facebook"></i></a><a href="https://github.com/HirdeshKumar2407/"><i class="icon ion-social-github"></i></a><a href="https://www.linkedin.com/in/hirdesh-kumar-3482781a1/"><i class="icon ion-social-linkedin"></i></a>
+                            <a
+                                href="https://www.instagram.com/hirdeshkumar98/"><i class="icon ion-social-instagram"></i></a>
+                        </div>
+                    </div>
+                    <p class="copyright">Hirdesh Kumar © 2021</p>
+                </div>
+            </footer>
+        </div>
+      </div>
+</div>
+</body>
+<% include partials/script %>
+</html>
