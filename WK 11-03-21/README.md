@@ -1,5 +1,5 @@
 WK 4 
-WHat I learned:
+What I learned:
 
 Simple WEB API without controller and model
 With Express JS
