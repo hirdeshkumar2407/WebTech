@@ -9,7 +9,7 @@ NODEMAN
 
 WEB API BASIC CRUD
 
-HTTP Verb: GET, POST
+HTTP Verb: GET,  POST
 
 next call back function
 
