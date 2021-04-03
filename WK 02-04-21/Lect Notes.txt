@@ -1,0 +1,43 @@
+WK 7
+
+Basic setup
+
+1) npm i -g express-generator nodemon
+2) express --view ejs website
+3) npm i mongoose body-parser --save 
+4) npm install
+NOTES:
+Express would be the web server
+
+View Engine is EJS
+
+mywebsite is going project folder 
+
+npm install 
+#downloads all dependences in different machine
+
+package.json
+#to run a script
+
+#recofirmining ejs setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+
+
+ res.render('index', { page: 'Home', menuId:'home'});
+
+#res.render() is function that calls ejs file
+#{page: 'Home', menuId:'home'} controller is using route to commuincate with the view. Same thing ocurs vice versa
+
+MVC
+
+
+
+let handles abstract different data types
+
+
+res.render('call the view',{variables to pass to the view})
+
+variables are following key value pair
+
