@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/menu1 %>
+    <div class="container-fluid bg-3 text-center">    
+    <h3><%= page %></h3><br>
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% product.forEach(function(product) { %>
+                    <tr>
+                        <td><%= product._id %> </td> 
+                        <td><%= product.name %></td>
+                        <td><%= product.price %></td>
+                        <td>
+                            <form action='updateform/<%=product._id %>' method="post">
+                                <button type="submit" class="btn btn-teal btn-rounded btn-sm m-0 waves-effect" >Update</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action='<%=product._id %>/delete' method="post">
+                                <button type="submit" class="btn btn-teal btn-rounded btn-sm m-0 waves-effect" > Delete</button>
+                            </form>
+                        </td>
+                    </tr>    
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+<% include partials/script %>
+</html>
