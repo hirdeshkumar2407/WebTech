@@ -1,0 +1,40 @@
+.App {
+  text-align: center;
+  display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+}
+
+input,button{
+  width:200px;
+  height:30px;
+  font-size:20px;
+  margin:5px;
+}
+
+
+#books{
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse:collapse;
+  width:100%;
+}
+
+#books td,th{
+  border:1px solid #ddd;
+  padding:8px
+
+}
+
+#books tr:nth-child(even){background-color:#ddd}
+
+#books tr:hover{background-color: #ddd;}
+
+#books th{
+
+  padding-top: 12px;
+  padding-bottom: 12px;
+text-align: left;
+background-color: #4CAF50;
+color:white;
+}

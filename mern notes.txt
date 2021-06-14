@@ -1,0 +1,455 @@
+Create two folders: client and server
+
+In client folder, create react app by typing:
+
+npx create-react-app .
+
+This will create the react app within this folder.
+
+Create a new terminal, go inside server folder and type:
+
+npm init
+
+press enter, to create package.json file.
+
+Install express and mongoose by typing:
+
+npm i express mongoose
+WORKING WITH THE BACKEND FIRST:
+-------------------------------
+create index.js file in server folder.
+
+Type the following:
+
+------------------------------------------
+const express=require('express');
+const mongoose=require('mongoose');
+const app=express();
+
+const BookModel=require('./models/Book');
+
+app.use(express.json())
+
+mongoose.connect('mongodb+srv://adeelansari:abcd1234@cluster0.okieo.mongodb.net/Test?retryWrites=true&w=majority',{
+    useNewUrlParser:true, useUnifiedTopology:true    
+})
+
+app.get("/",async(req,res)=>{
+    const book=new BookModel({title:"Test Title",isbn:"11111",pageCount:112,shortDescription:"Test Desc"});
+    try{
+        await book.save();
+    }catch(err){
+        console.log(err);
+    }
+});
+
+app.listen(3001,()=>{console.log('Server is running on port 3001.')})
+------------------------------------------
+create folder models, create file "Book.js":
+
+------------------------------------------
+const mongoose=require('mongoose');
+
+const BookSchema=new mongoose.Schema({
+    title:{type:String, required:true},
+    isbn:{type:String, required:true},
+    pageCount:{type:Number,required:true},
+    shortDescription:{type:String,required:true}
+
+});
+
+const Book=mongoose.model("books",BookSchema);
+module.exports=Book
+------------------------------------------
+install nodemon:
+
+npm i nodemon
+
+Copy paste this in package.json:
+  "scripts": {
+    "start": "node app",
+    "devStart":"nodemon app"
+  }
+
+now run the server using "npm run devStart".
+-----------------------------------------------------------------------------------------
+
+WORKING WITH THE FRONT-END
+
+Goto Client folder/ goto src folder.
+
+Delete all files and keep only index.js, App.js, App.css.
+
+Clear everything in index.js and make it look like this:
+
+------------------------------------------------------------
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render( <App />,  document.getElementById('root'));
+------------------------------------------------------------
+
+App.js
+------------------------------------------------------------
+
+import React from 'react';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">      
+    </div>
+  );
+}
+
+export default App;
+------------------------------------------------------------
+App.css
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input, button{
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+  margin: 5px;
+}
+
+-----------------------------------------------------------
+Add all the input items of the form, into App.js
+
+-----------------------------------------------------------
+
+import React from 'react';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App"> 
+    <h1>CRUD APP with MERN</h1>
+    <label>Title</label><input type="text"></input> 
+    <label>ISBN</label><input type="text"></input>    
+    <label>Page Count</label><input type="number"></input>
+    <label>Short Description</label><input type="text"></input>
+    <button>Add o the List</button>
+    </div>
+  );
+}
+
+export default App;
+---------------------------------------------------------
+Now the data has to be saved into a State. Let's create states in App.js.
+---------------------------------------------------------
+
+import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+
+  const [title,settitle]=useState('')
+  const [isbn,setisbn]=useState('')
+  const [pageCount,setpageCount]=useState(0)
+  const [shortDescription,setshortDescription]=useState('')
+
+  const addToList=()=>{
+    console.log(title+isbn)
+  }
+  return (
+    <div className="App"> 
+    <h1>CRUD APP with MERN</h1>
+    <label>Title</label><input type="text" onChange={(event)=>{settitle(event.target.value)}}></input> 
+    <label>ISBN</label><input type="text" onChange={(event)=>{setisbn(event.target.value)}}></input>    
+    <label>Page Count</label><input type="number" onChange={(event)=>{setpageCount(event.target.value)}}></input>
+    <label>Short Description</label><input type="text" onChange={(event)=>{setshortDescription(event.target.value)}}></input>
+    <button onClick={addToList}>Add to the List</button>
+    </div>
+  );
+}
+
+export default App;
+
+-----------------------------------------------------------------
+Now we need to install "axios". Open a new terminal, and go in client folder and type this command:
+
+"npm i axios" 
+
+This package allows us to create HTTP requests that allows us to communicate from the FRONT-END with the BACK-END.
+
+After installation, import Axios into App.js file within the FRONT-END.
+
+use the Axios.post method to post information to the BACK-END. 
+
+Make sure you change the .get method to .post method in the BACK-END.
+
+Also to install "cors" in server folder:
+
+"npm i cors"
+
+Include cors into the index.js.
+
+index.js in server folder:
+-----------------------------------------------------------------
+const express=require('express');
+const mongoose=require('mongoose');
+const cors=require('cors')
+const app=express();
+
+const BookModel=require('./models/Book');
+
+app.use(express.json())
+app.use(cors())
+
+mongoose.connect('mongodb+srv://adeelansari:abcd1234@cluster0.okieo.mongodb.net/Test?retryWrites=true&w=majority',{
+    useNewUrlParser:true, useUnifiedTopology:true    
+})
+
+app.post("/insert",async(req,res)=>{
+    const title=req.body.title;
+    const isbn=req.body.isbn;
+    const pageCount=req.body.pageCount;
+    const shortDescription=req.body.shortDescription;
+
+    const book=new BookModel({title:title,isbn:isbn,pageCount:pageCount,shortDescription:shortDescription});
+    try{
+        await book.save();
+    }catch(err){
+        console.log(err);
+    }
+});
+
+app.listen(3001,()=>{console.log('Server is running on port 3001.')})
+-----------------------------------------------------------------------
+
+App.js in Client folder:
+-----------------------------------------------------------------------
+
+import React, { useState } from 'react';
+import './App.css';
+import Axios from 'axios';
+
+function App() {
+
+  const [title,settitle]=useState('')
+  const [isbn,setisbn]=useState('')
+  const [pageCount,setpageCount]=useState(0)
+  const [shortDescription,setshortDescription]=useState('')
+
+  const addToList=()=>{
+    //console.log(title+isbn)
+    Axios.post("http://localhost:3001/insert",{
+      title:title,
+      isbn:isbn,
+      pageCount:pageCount,
+      shortDescription:shortDescription
+    }); //mention the route of the backend here
+  }
+  return (
+    <div className="App"> 
+    <h1>CRUD APP with MERN</h1>
+    <label>Title</label><input type="text" onChange={(event)=>{settitle(event.target.value)}}></input> 
+    <label>ISBN</label><input type="text" onChange={(event)=>{setisbn(event.target.value)}}></input>    
+    <label>Page Count</label><input type="number" onChange={(event)=>{setpageCount(event.target.value)}}></input>
+    <label>Short Description</label><input type="text" onChange={(event)=>{setshortDescription(event.target.value)}}></input>
+    <button onClick={addToList}>Add to the List</button>
+    </div>
+  );
+}
+
+export default App;
+
+------------------------------------------------------------------
+
+To Read Data from MongoDb:
+
+First, create the App.get method to retrieve all the records from the database
+
+Index.js - include this method in index.js, to read all data from database and check on: http://localhost:3001/read
+------------------------------------------------------------------
+app.get('/read',async(req,res)=>{
+    BookModel.find({},(err,result)=>{
+        if(err) res.send(err);
+
+        res.send(result);
+    });
+});
+
+------------------------------------------------------------------
+
+In the client side, we will use "useEffect".
+----------------------------------------------------------------
+const [bookList,setBookList]=useState([])   //create a state for retrieving booklist
+
+useEffect(()=>{
+  Axios.get("http://localhost:3001/read").then((response)=>{
+    setBookList(response.data)
+  })
+},[])
+-----------------------------------------------------------------
+
+Now add this state "bookList" into the the page, so overall, your App.js will look like this:
+
+------------------------------------------------------------------
+import React, { useState,useEffect } from 'react';
+import './App.css';
+import Axios from 'axios';
+
+function App() {
+
+  const [title,settitle]=useState('')
+  const [isbn,setisbn]=useState('')
+  const [pageCount,setpageCount]=useState(0)
+  const [shortDescription,setshortDescription]=useState('')
+
+  const addToList=()=>{
+    //console.log(title+isbn)
+    Axios.post("http://localhost:3001/insert",{
+      title:title,
+      isbn:isbn,
+      pageCount:pageCount,
+      shortDescription:shortDescription
+    }); //mention the route of the backend here
+  }
+
+const [bookList,setBookList]=useState([])
+
+useEffect(()=>{
+  Axios.get("http://localhost:3001/read").then((response)=>{
+    setBookList(response.data)
+  })
+},[])
+
+  return (
+    <div className="App"> 
+    <h1>CRUD APP with MERN</h1>
+    <label>Title</label><input type="text" onChange={(event)=>{settitle(event.target.value)}}></input> 
+    <label>ISBN</label><input type="text" onChange={(event)=>{setisbn(event.target.value)}}></input>    
+    <label>Page Count</label><input type="number" onChange={(event)=>{setpageCount(event.target.value)}}></input>
+    <label>Short Description</label><input type="text" onChange={(event)=>{setshortDescription(event.target.value)}}></input>
+    <button onClick={addToList}>Add to the List</button>
+    
+    <h1>Book List</h1>
+    <table id='books'>
+    <thead>
+      <th>Title</th><th>ISBN</th><th>Page Count</th><th>Short Description</th>
+    </thead>
+    <tbody>  
+    {bookList.map((val,key)=>{
+      return (<tr><td>{val.title}</td><td>{val.isbn}</td><td>{val.pageCount}</td><td>{val.shortDescription}</td></tr>)
+    })}
+    </tbody>
+    </table>
+    </div>
+  );
+}
+
+export default App;
+--------------------------------------------------------------
+
+Update Operation
+
+in App.js:
+-----------------------------------------------
+const [newtitle,setnewtitle]=useState('')
+
+const updateTitle=(id)=>{
+  Axios.put('http://localhost:3001/update',{
+    id:id,
+    newtitle:newtitle
+  })
+}
+----------------------------------------------
+Table part now in App.js:
+----------------------------------------------
+<table id='books'>
+    <thead>
+      <th>Title</th><th>ISBN</th><th>Page Count</th><th>Short Description</th><th>&nbsp;</th><th>&nbsp;</th>
+    </thead>
+    <tbody>  
+    {bookList.map((val,key)=>{
+      return (
+      <tr>
+        <td>
+          {val.title} <input type='text' placeholder='New Title' onChange={(event)=>{setnewtitle(event.target.value)}}></input>
+        <button onClick={()=>updateTitle(val._id)}>Update</button>
+        </td>
+        <td>{val.isbn}</td>
+        <td>{val.pageCount}</td>
+        <td>{val.shortDescription}</td>
+        <td><button>DELETE</button></td>
+      </tr>)
+    })}
+    </tbody>
+    </table>
+---------------------------------------------
+
+In index.js:
+---------------------------------------------
+app.put("/update",async(req,res)=>{
+    const newtitle=req.body.newtitle;
+    const id=req.body.id;
+    
+    try{
+        await BookModel.findById(id,(err, updatedtitle)=>{
+            updatedtitle.title=newtitle;
+            updatedtitle.save();
+            res.send('Updated.')
+        })
+    }catch(err){
+        console.log(err);
+    }
+});
+---------------------------------------------
+
+DELETE Operation:
+---------------------------------------------
+
+in App.js:
+----------------------------------
+const deleteBook=(id)=>{
+  Axios.delete(`http://localhost:3001/delete/${id}`)
+}
+----------------------------------
+The table part of App.js:
+----------------------------------
+    <table id='books'>
+    <thead>
+      <th>Title</th><th>ISBN</th><th>Page Count</th><th>Short Description</th><th>&nbsp;</th><th>&nbsp;</th>
+    </thead>
+    <tbody>  
+    {bookList.map((val,key)=>{
+      return (
+      <tr>
+        <td>
+          {val.title} <input type='text' placeholder='New Title' onChange={(event)=>{setnewtitle(event.target.value)}}></input>
+        <button onClick={()=>updateTitle(val._id)}>Update</button>
+        </td>
+        <td>{val.isbn}</td>
+        <td>{val.pageCount}</td>
+        <td>{val.shortDescription}</td>
+        <td><button onClick={()=>deleteBook(val._id)}>DELETE</button></td>
+      </tr>)
+    })}
+    </tbody>
+    </table>
+---------------------------------
+
+Delete method in Index.js:
+---------------------------------
+app.delete("/delete/:id", async(req,res)=>{
+    const id=req.params.id;
+
+    await BookModel.findByIdAndRemove(id).exec();
+    res.send('Deleted.');
+})
+----------------------------------
+
+
+
+
+
